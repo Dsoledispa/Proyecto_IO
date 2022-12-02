@@ -23,6 +23,8 @@ namespace Proyecto_IO
             public int autonomia;
             public float precio;
             public int puertas;
+            public int [] telefono = new int[MAX];
+            public int num_telefonos;
         }
         class Lista_coches
         {
@@ -46,13 +48,14 @@ namespace Proyecto_IO
             }
 
             int i = 0;
+            int j; //para recorrer numeros de telefono
             string linea = dato_fichero.ReadLine();
             while (linea != null)
             {
                 try
                 {
                     Coche c = new Coche();
-                    string[] columna = linea.Split(' ');
+                    string [] columna = linea.Split(' ');
                     c.id = Convert.ToInt32(columna[0]);
                     c.marca = columna[1];
                     c.modelo = columna[2];//meter telefonos
@@ -60,6 +63,17 @@ namespace Proyecto_IO
                     c.autonomia = Convert.ToInt32(columna[4]);
                     c.precio = Convert.ToSingle(columna[5]);
                     c.puertas = Convert.ToInt32(columna[6]);
+                    if (columna.Length > 7)
+                    {
+                        string[] telefonos= columna[7].Split(',');
+                        j = 0;
+                        while(j < telefonos.Length)
+                        {
+                            c.telefono[j] = Convert.ToInt32(telefonos[j]);
+                            j++;
+                        }
+                        c.num_telefonos = j;
+                    }
 
                     lista.coches[i] = c;
                     i++;
@@ -119,10 +133,12 @@ namespace Proyecto_IO
                 Console.WriteLine("Opciones:");
                 Console.WriteLine("0: Cerrar y guardar datos");
                 Console.WriteLine("1: Mostrar Todo");
-                Console.WriteLine("2: Añadir coche");
+                Console.WriteLine("2: Insertar coche");
                 Console.WriteLine("3: Eliminar coche");
                 Console.WriteLine("4: Modificar atributo");
                 Console.WriteLine("5: Buscar modelo");
+                Console.WriteLine("6: Insertar telefono");
+                Console.WriteLine("7: Eliminar telefono");
                 Console.WriteLine("Elige una opcion");
 
                 try
@@ -158,6 +174,12 @@ namespace Proyecto_IO
                     case 5:
                         busqueda_modelo(autos);
                         break;
+                    case 6:
+                        add_telefono(autos);
+                        break;
+                    case 7:
+                        eliminar_telefono(autos);
+                        break;
                     default:
                         Console.Clear();
                         Console.WriteLine("La opcion es incorrecta");
@@ -173,6 +195,7 @@ namespace Proyecto_IO
         {
             //alex
             int i = 0;
+            int j;
             Console.Clear();
             while (i < autos.numero)
             {
@@ -184,6 +207,17 @@ namespace Proyecto_IO
                 Console.WriteLine("Autonomia: " + autos.coches[i].autonomia);
                 Console.WriteLine("Numero de puertas: " + autos.coches[i].puertas);
                 Console.WriteLine("Precio: " + autos.coches[i].precio);
+                if (autos.coches[i].num_telefonos != 0)
+                {
+                    j = 0;
+                    Console.Write("Telefonos de interesados: ");
+                    while (j < autos.coches[i].num_telefonos)
+                    {
+                        Console.Write(autos.coches[i].telefono[j] + " ");
+                        j++;
+                    }
+                    Console.WriteLine(" ");
+                }
                 Console.WriteLine("-----------");
                 i++;
             }
@@ -227,12 +261,69 @@ namespace Proyecto_IO
                 Console.ReadKey();
                 return;
             }
-
+            Console.WriteLine("");
+            Console.WriteLine("Coche insertado con exito");
             Console.WriteLine("Pulsa una tecla para volver");
             Console.WriteLine("");
             Console.ReadKey();
 
 
+        }
+
+        static void add_telefono(Lista_coches autos)
+        {
+            Console.Clear();
+            int id;
+            Console.WriteLine("Introduce el ID del vehiculo que deseas ponerle el n de telefono: ");
+            try
+            {
+                id = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            bool encontrado = false;
+            int i = 0;
+            while ((i < autos.numero) && (encontrado != true))
+            {
+                if (id == autos.coches[i].id)
+                {
+                    encontrado = true;
+                }
+                else
+                {
+                    i++;
+                }
+
+            }
+            if (encontrado)
+            {
+                Console.Write("Introduce el n de telefono: ");
+                try
+                {
+                    autos.coches[i].telefono[autos.coches[i].num_telefonos] = Convert.ToInt32(Console.ReadLine());
+                    autos.coches[i].num_telefonos++;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("No has introducido un numero");
+                    Console.WriteLine("Pulsa una tecla para volver");
+                    Console.ReadKey();
+                    return;
+                }
+                Console.WriteLine("Numero de telefono insertado con exito");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("El ID introducido no existe.");
+                Console.ReadKey();
+            }
         }
 
         static void eliminar_coche(Lista_coches autos)
@@ -270,7 +361,7 @@ namespace Proyecto_IO
 
             if (encontrado)
             {
-                while (i < autos.numero)
+                while (i < autos.numero-1)
                 {
                     autos.coches[i] = autos.coches[i + 1];
                     i++;
@@ -288,6 +379,87 @@ namespace Proyecto_IO
             Console.WriteLine("");
             Console.ReadKey();
 
+        }
+
+        static void eliminar_telefono(Lista_coches autos)
+        {
+            Console.Clear();
+            int id;
+            int id_numero;
+            Console.WriteLine("Introduce el ID del vehiculo que desea eliminar el n de telefono: ");
+            try
+            {
+                id = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            bool encontrado = false;
+            int i = 0;
+            int j;
+            while ((i < autos.numero) && (encontrado != true))
+            {
+                if (id == autos.coches[i].id)
+                {
+                    encontrado = true;
+                }
+                else
+                {
+                    i++;
+                }
+
+            }
+
+            if (encontrado)
+            {
+                if (autos.coches[i].num_telefonos != 0)
+                {
+                    j = 0;
+                    Console.WriteLine("Selecciona el numero de telefono que desea eliminar");
+                    while (j < autos.coches[i].num_telefonos)
+                    {
+                        Console.WriteLine(j + ": " + autos.coches[i].telefono[j]);
+                        j++;
+                    }
+                    Console.Write("Numero a eliminar: ");
+                    try
+                    {
+                        id_numero = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("No has introducido un numero");
+                        Console.WriteLine("Pulsa una tecla para volver");
+                        Console.ReadKey();
+                        return;
+                    }
+                    while(id_numero < autos.coches[i].num_telefonos-1)
+                    {
+                        autos.coches[i].telefono[id_numero] = autos.coches[i].telefono[id_numero + 1];
+                        id_numero++;
+                    }
+                    autos.coches[i].telefono[autos.coches[i].num_telefonos-1] = 0;
+                    autos.coches[i].num_telefonos--;
+                    Console.WriteLine("Numero de telefono eliminado con exito");
+
+                }
+                else
+                {
+                    Console.WriteLine("No hay numeros de telefonos asociados a este modelo de vehiculo");
+                }
+            }
+            else
+            {
+                Console.WriteLine("El ID introducido no existe.");
+            }
+
+            Console.WriteLine("Pulsa una tecla para volver");
+            Console.WriteLine("");
+            Console.ReadKey();
         }
 
         static void modificar_atributo(Lista_coches autos)
@@ -309,6 +481,7 @@ namespace Proyecto_IO
             }
             bool encontrado = false;
             int i = 0;
+            int j;
             while ((i < autos.numero) && (encontrado != true))
             {
                 if (id == autos.coches[i].id)
@@ -331,6 +504,14 @@ namespace Proyecto_IO
                 Console.WriteLine("4. Autonomia                " + autos.coches[i].autonomia);
                 Console.WriteLine("5. Puertas                  " + autos.coches[i].puertas);
                 Console.WriteLine("6. Precio                   " + autos.coches[i].precio);
+                j = 0;
+                Console.Write("7. Telefonos ");
+                while (j < autos.coches[i].num_telefonos)
+                {
+                    Console.Write(autos.coches[i].telefono[j] + " ");
+                    j++;
+                }
+                Console.WriteLine(" ");
                 Console.WriteLine("0. Volver al menu");
                 try
                 {
@@ -414,6 +595,9 @@ namespace Proyecto_IO
                         Console.WriteLine("Cambio realizado con exito");
                         Console.ReadKey();
                         break;
+                    case 7:
+                        modificar_telefono(autos, i);
+                        break;
                     default:
                         Console.Clear();
                         Console.WriteLine("La opcion es incorrecta");
@@ -430,12 +614,61 @@ namespace Proyecto_IO
             }
         }
 
+        static void modificar_telefono(Lista_coches autos, int i)
+        {
+            Console.Clear();
+            int j;
+            int id_numero;
+            if (autos.coches[i].num_telefonos != 0)
+            {
+                j = 0;
+                Console.WriteLine("Selecciona el numero de telefono que desea modificar");
+                while (j < autos.coches[i].num_telefonos)
+                {
+                    Console.WriteLine(j + ": " + autos.coches[i].telefono[j]);
+                    j++;
+                }
+                Console.Write("Numero a modificar: ");
+                try
+                {
+                    id_numero = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("No has introducido un numero");
+                    Console.WriteLine("Pulsa una tecla para volver");
+                    Console.ReadKey();
+                    return;
+                }
+                Console.Write("Introduce el n de telefono rectificado: ");
+                try
+                {
+                    autos.coches[i].telefono[id_numero] = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("No has introducido un numero");
+                    Console.WriteLine("Pulsa una tecla para volver");
+                    Console.ReadKey();
+                    return;
+                }
+                Console.WriteLine("Numero de telefono cambiado con exito");
+
+            }
+            else
+            {
+                Console.WriteLine("No hay numeros de telefonos asociados a este modelo de vehiculo");
+            }
+            Console.ReadKey();
+        }
+
         static void busqueda_modelo(Lista_coches autos)
         {
             // arslan
             string modelobuscado;
             bool encontrado = false;
             int i = 0;
+            int j;
             Console.Clear();
             Console.Write("Escriba el modelo que desee: ");
             modelobuscado = Console.ReadLine();
@@ -462,6 +695,17 @@ namespace Proyecto_IO
                 Console.WriteLine("Autonomia: " + autos.coches[i].autonomia);
                 Console.WriteLine("Numero de puertas: " + autos.coches[i].puertas);
                 Console.WriteLine("Precio: " + autos.coches[i].precio);
+                if (autos.coches[i].num_telefonos != 0)
+                {
+                    j = 0;
+                    Console.Write("Telefonos de interesados: ");
+                    while (j < autos.coches[i].num_telefonos)
+                    {
+                        Console.Write(autos.coches[i].telefono[j] + " ");
+                        j++;
+                    }
+                    Console.WriteLine(" ");
+                }
             }
             else
             {
@@ -480,9 +724,41 @@ namespace Proyecto_IO
             StreamWriter res;
             res = new StreamWriter("datos.txt");
             int i = 0;
+            int j;
             while (i < lista.numero)
             {
-                res.WriteLine(lista.coches[i].id+" " + lista.coches[i].marca+" " + lista.coches[i].modelo+" " + lista.coches[i].tipo_vehiculo+" "+ lista.coches[i].autonomia+" " + lista.coches[i].precio+" " + lista.coches[i].puertas);
+                if (lista.coches[i].num_telefonos != 0)
+                {
+                    res.Write(
+                    lista.coches[i].id + " "
+                    + lista.coches[i].marca + " "
+                    + lista.coches[i].modelo + " "
+                    + lista.coches[i].tipo_vehiculo + " "
+                    + lista.coches[i].autonomia + " "
+                    + lista.coches[i].precio + " "
+                    + lista.coches[i].puertas + " "
+                    );
+                    j = 0;
+                    while (j < lista.coches[i].num_telefonos-1)
+                    {
+                        res.Write(lista.coches[i].telefono[j] + ",");
+                        j++;
+                    }
+                    res.Write(lista.coches[i].telefono[j]);
+                    res.WriteLine("");
+                }
+                else
+                {
+                    res.WriteLine(
+                    lista.coches[i].id + " "
+                    + lista.coches[i].marca + " "
+                    + lista.coches[i].modelo + " "
+                    + lista.coches[i].tipo_vehiculo + " "
+                    + lista.coches[i].autonomia + " "
+                    + lista.coches[i].precio + " "
+                    + lista.coches[i].puertas
+                    );
+                }
                 i++;
             }
             res.Close();

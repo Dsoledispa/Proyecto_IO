@@ -21,7 +21,7 @@ namespace Proyecto_IO
             public string modelo;
             public string tipo_vehiculo;
             public int autonomia;
-            public decimal precio;
+            public float precio; //al estar en europa se usa la coma, no el punto para separar la parte entera de los decimales
             public int puertas;
             public int [] telefono = new int[MAX];
             public int num_telefonos;
@@ -61,7 +61,7 @@ namespace Proyecto_IO
                     c.modelo = columna[2];//meter telefonos
                     c.tipo_vehiculo = columna[3];
                     c.autonomia = Convert.ToInt32(columna[4]);
-                    c.precio = Convert.ToDecimal(columna[5]);
+                    c.precio = Convert.ToSingle(columna[5]);
                     c.puertas = Convert.ToInt32(columna[6]);
                     if (columna.Length > 7)
                     {
@@ -234,14 +234,14 @@ namespace Proyecto_IO
         {
             int i = 0;
             int j;
-            decimal minimo;
-            decimal maximo;
+            float minimo;
+            float maximo;
             Console.Clear();
-            Console.WriteLine("Introduce el precio minimo y maximo de busqueda de coche");
+            Console.WriteLine("Introduce el precio minimo y maximo de busqueda de coche (para poner decimales usar la coma ,)");
             Console.Write("Minimo: ");
             try
             {
-                minimo = Convert.ToDecimal(Console.ReadLine());
+                minimo = Convert.ToSingle(Console.ReadLine());
             }
             catch (FormatException)
             {
@@ -253,7 +253,7 @@ namespace Proyecto_IO
             Console.Write("Maximo: ");
             try
             {
-                maximo = Convert.ToDecimal(Console.ReadLine());
+                maximo = Convert.ToSingle(Console.ReadLine());
             }
             catch (FormatException)
             {
@@ -315,8 +315,8 @@ namespace Proyecto_IO
                 c.tipo_vehiculo = Console.ReadLine();
                 Console.Write("Autonomia: ");
                 c.autonomia = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Precio: ");
-                c.precio = Convert.ToDecimal(Console.ReadLine());
+                Console.Write("Precio (para poner decimales usar la coma ,): ");
+                c.precio = Convert.ToSingle(Console.ReadLine());
                 Console.Write("Nº puertas: ");
                 c.puertas = Convert.ToInt32(Console.ReadLine());
                 autos.coches[autos.numero] = c;
@@ -648,10 +648,10 @@ namespace Proyecto_IO
                         Console.ReadKey();
                         break;
                     case 6:
-                        Console.Write("Introduce el precio del vehiculo: ");
+                        Console.Write("Introduce el precio del vehiculo (para poner decimales usar la coma ,): ");
                         try
                         {
-                            autos.coches[i].precio = Convert.ToInt32(Console.ReadLine());
+                            autos.coches[i].precio = Convert.ToSingle(Console.ReadLine());
                         }
                         catch (FormatException)
                         {

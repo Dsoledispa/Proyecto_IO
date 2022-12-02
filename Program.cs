@@ -21,7 +21,7 @@ namespace Proyecto_IO
             public string modelo;
             public string tipo_vehiculo;
             public int autonomia;
-            public float precio;
+            public decimal precio;
             public int puertas;
             public int [] telefono = new int[MAX];
             public int num_telefonos;
@@ -61,7 +61,7 @@ namespace Proyecto_IO
                     c.modelo = columna[2];//meter telefonos
                     c.tipo_vehiculo = columna[3];
                     c.autonomia = Convert.ToInt32(columna[4]);
-                    c.precio = Convert.ToSingle(columna[5]);
+                    c.precio = Convert.ToDecimal(columna[5]);
                     c.puertas = Convert.ToInt32(columna[6]);
                     if (columna.Length > 7)
                     {
@@ -139,6 +139,7 @@ namespace Proyecto_IO
                 Console.WriteLine("5: Buscar modelo");
                 Console.WriteLine("6: Insertar telefono");
                 Console.WriteLine("7: Eliminar telefono");
+                Console.WriteLine("8: Coches entre un rango de precio");
                 Console.WriteLine("Elige una opcion");
 
                 try
@@ -179,6 +180,9 @@ namespace Proyecto_IO
                         break;
                     case 7:
                         eliminar_telefono(autos);
+                        break;
+                    case 8:
+                        mostrar_entre_rango_precios(autos);
                         break;
                     default:
                         Console.Clear();
@@ -226,6 +230,70 @@ namespace Proyecto_IO
             Console.ReadKey();
         }
 
+        static void mostrar_entre_rango_precios(Lista_coches autos)
+        {
+            int i = 0;
+            int j;
+            decimal minimo;
+            decimal maximo;
+            Console.Clear();
+            Console.WriteLine("Introduce el precio minimo y maximo de busqueda de coche");
+            Console.Write("Minimo: ");
+            try
+            {
+                minimo = Convert.ToDecimal(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            Console.Write("Maximo: ");
+            try
+            {
+                maximo = Convert.ToDecimal(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            Console.Clear();
+            while (i < autos.numero)
+            {
+                if ((autos.coches[i].precio>=minimo) && (autos.coches[i].precio<=maximo))
+                {
+                    Console.WriteLine("ID: " + autos.coches[i].id);
+                    Console.WriteLine("Marca: " + autos.coches[i].marca);
+                    Console.WriteLine("Modelo: " + autos.coches[i].modelo);
+                    Console.WriteLine("Tipo de vehiculo: " + autos.coches[i].tipo_vehiculo);
+                    Console.WriteLine("Autonomia: " + autos.coches[i].autonomia);
+                    Console.WriteLine("Numero de puertas: " + autos.coches[i].puertas);
+                    Console.WriteLine("Precio: " + autos.coches[i].precio);
+                    if (autos.coches[i].num_telefonos != 0)
+                    {
+                        j = 0;
+                        Console.Write("Telefonos de interesados: ");
+                        while (j < autos.coches[i].num_telefonos)
+                        {
+                            Console.Write(autos.coches[i].telefono[j] + " ");
+                            j++;
+                        }
+                        Console.WriteLine(" ");
+                    }
+                    Console.WriteLine("-----------");
+                }
+                i++;
+            }
+            Console.WriteLine("Pulsa una tecla para volver");
+            Console.WriteLine("");
+            Console.ReadKey();
+        }
+
         static void add_coche(Lista_coches autos)
         {
             //julia
@@ -248,7 +316,7 @@ namespace Proyecto_IO
                 Console.Write("Autonomia: ");
                 c.autonomia = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Precio: ");
-                c.precio = Convert.ToSingle(Console.ReadLine());
+                c.precio = Convert.ToDecimal(Console.ReadLine());
                 Console.Write("Nº puertas: ");
                 c.puertas = Convert.ToInt32(Console.ReadLine());
                 autos.coches[autos.numero] = c;

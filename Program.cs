@@ -97,8 +97,8 @@ namespace Proyecto_IO
             //Este sera el menu
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             //SoundPlayer admite audio en .wav, poneis la musica dentro del proyecto bin/debug y ya
-            //SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
-            //player.PlayLooping();
+            SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
+            player.PlayLooping();
 
             Lista_coches autos = new Lista_coches();
             int res =Leer_fichero(autos);
@@ -790,6 +790,8 @@ namespace Proyecto_IO
             //Diego
             //La idea es que al finalizar el programa se guarde en un txt los datos actuales
             StreamWriter res;
+            // si se quiere trabajar con los datos guardados cambias el archivo txt de nombre
+            // en cambio de datos.txt pones coches.txt
             res = new StreamWriter("datos.txt");
             int i = 0;
             int j;

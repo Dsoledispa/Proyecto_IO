@@ -740,6 +740,8 @@ namespace Proyecto_IO
             int j;
             int minimo;
             int maximo;
+            int[] array_telefonos = new int[MAX];
+            int k = 0;
             Console.Clear();
             Console.WriteLine("Introduce el rango minimo y maximo de n de telefono");
             Console.Write("Minimo: ");
@@ -776,15 +778,32 @@ namespace Proyecto_IO
                     {
                         if ((autos.coches[i].telefono[j] >= minimo) && (autos.coches[i].telefono[j] <= maximo))
                         {
-                            Console.WriteLine(autos.coches[i].telefono[j]);
+                            array_telefonos[k] = autos.coches[i].telefono[j];
+                            k++;
                         }
                         j++;
                     }
                 }
                 i++;
             }
-            Console.WriteLine("Pulsa una tecla para volver");
+            //Con Array.Sort reorganizo el vector del numero de telefono mas bajo al mas alto
+            //Como Array.Sort me cambia de posicion los numeros al final del array, cambio el numero de k para poder imprimir esos numeros finales
+            k=MAX-k;
+            Array.Sort(array_telefonos);
+            if (k != MAX)
+            {
+                while (k < array_telefonos.Length)
+                {
+                    Console.WriteLine(array_telefonos[k]);
+                    k++;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No hay ningun numero de telefono dentro del rango elegido");
+            }
             Console.WriteLine("");
+            Console.WriteLine("Pulsa una tecla para volver");
             Console.ReadKey();
         }
 

@@ -97,8 +97,8 @@ namespace Proyecto_IO
             //Este sera el menu
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             //SoundPlayer admite audio en .wav, poneis la musica dentro del proyecto bin/debug y ya
-            SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
-            player.PlayLooping();
+            //SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
+            //player.PlayLooping();
 
             Lista_coches autos = new Lista_coches();
             int res =Leer_fichero(autos);
@@ -139,7 +139,8 @@ namespace Proyecto_IO
                 Console.WriteLine("5: Buscar modelo");
                 Console.WriteLine("6: Insertar telefono");
                 Console.WriteLine("7: Eliminar telefono");
-                Console.WriteLine("8: Coches entre un rango de precio");
+                Console.WriteLine("8: Mostrar telefonos dentro de un intervalo");
+                Console.WriteLine("9: Coches entre un rango de precio");
                 Console.WriteLine("Elige una opcion");
 
                 try
@@ -182,6 +183,9 @@ namespace Proyecto_IO
                         eliminar_telefono(autos);
                         break;
                     case 8:
+                        mostrar_entre_rango_telefonos(autos);
+                        break;
+                    case 9:
                         mostrar_entre_rango_precios(autos);
                         break;
                     default:
@@ -727,6 +731,60 @@ namespace Proyecto_IO
             {
                 Console.WriteLine("No hay numeros de telefonos asociados a este modelo de vehiculo");
             }
+            Console.ReadKey();
+        }
+
+        static void mostrar_entre_rango_telefonos(Lista_coches autos)
+        {
+            int i = 0;
+            int j;
+            int minimo;
+            int maximo;
+            Console.Clear();
+            Console.WriteLine("Introduce el rango minimo y maximo de n de telefono");
+            Console.Write("Minimo: ");
+            try
+            {
+                minimo = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            Console.Write("Maximo: ");
+            try
+            {
+                maximo = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                return;
+            }
+            Console.Clear();
+            while (i < autos.numero)
+            {
+                if (autos.coches[i].num_telefonos != 0)
+                {
+                    j = 0;
+                    while (j < autos.coches[i].num_telefonos)
+                    {
+                        if ((autos.coches[i].telefono[j] >= minimo) && (autos.coches[i].telefono[j] <= maximo))
+                        {
+                            Console.WriteLine(autos.coches[i].telefono[j]);
+                        }
+                        j++;
+                    }
+                }
+                i++;
+            }
+            Console.WriteLine("Pulsa una tecla para volver");
+            Console.WriteLine("");
             Console.ReadKey();
         }
 

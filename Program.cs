@@ -25,6 +25,7 @@ namespace Proyecto_IO
             public int puertas;
             public int [] telefono = new int[MAX];
             public int num_telefonos;
+            public string examen;
         }
         class Lista_coches
         {
@@ -63,9 +64,10 @@ namespace Proyecto_IO
                     c.autonomia = Convert.ToInt32(columna[4]);
                     c.precio = Convert.ToSingle(columna[5]);
                     c.puertas = Convert.ToInt32(columna[6]);
-                    if (columna.Length > 7)
+                    c.examen = columna[7];
+                    if (columna.Length > 8)
                     {
-                        string[] telefonos= columna[7].Split(',');
+                        string[] telefonos= columna[8].Split(',');
                         j = 0;
                         while(j < telefonos.Length)
                         {
@@ -179,6 +181,7 @@ namespace Proyecto_IO
                 Console.WriteLine("7: Eliminar telefono");
                 Console.WriteLine("8: Mostrar telefonos dentro de un intervalo");
                 Console.WriteLine("9: Coches entre un rango de precio");
+                Console.WriteLine("10: Examen");
                 Console.WriteLine("Elige una opcion");
 
                 try
@@ -226,6 +229,14 @@ namespace Proyecto_IO
                         break;
                     case 9:
                         mostrar_entre_rango_precios(autos);
+                        break;
+                    case 10:
+                        int k = 0;
+                        while (k < 5)
+                        {
+                            imprimir_examen(autos);
+                            k++;
+                        }
                         break;
                     default:
                         Console.Clear();
@@ -899,6 +910,49 @@ namespace Proyecto_IO
             Console.WriteLine("Pulsa una tecla para volver");
             Console.ReadKey();
         
+        }
+
+        static void imprimir_examen(Lista_coches autos)
+        {
+            Console.Clear();
+            string examens;
+            Console.WriteLine("Introduce el examen del vehiculo que desea ver: ");
+            examens=Console.ReadLine();
+            bool encontrado = false;
+            int i = 0;
+            while ((i < autos.numero) && (encontrado != true))
+            {
+                if (examens == autos.coches[i].examen)
+                {
+                    encontrado = true;
+                }
+                else
+                {
+                    i++;
+                }
+
+            }
+            if (encontrado)
+            {
+                Console.WriteLine("Examen: " + autos.coches[i].examen + " , marca: " + autos.coches[i].marca);
+                if (autos.coches[i].num_telefonos != 0)
+                {
+                    Console.WriteLine("Primer telefono interesado: " + autos.coches[i].telefono[0]);
+                }
+                //Console.WriteLine("Cambia el valor de examen");
+                //Console.Write("Examen: ");
+                //autos.coches[i].examen=Console.ReadLine();
+                //Console.WriteLine("Valor cambiado con exito");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("El ID introducido no existe.");
+                Console.ReadKey();
+            }
+
+
+
         }
 
         static void guardar_datos(Lista_coches lista)

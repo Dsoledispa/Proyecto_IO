@@ -95,10 +95,8 @@ namespace Proyecto_IO
         {
             //Diego
             //Este sera el menu
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            //SoundPlayer admite audio en .wav, poneis la musica dentro del proyecto bin/debug y ya
-            //SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
-            //player.PlayLooping();
+            //Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Blue;
 
             Lista_coches autos = new Lista_coches();
             int res =Leer_fichero(autos);
@@ -126,6 +124,46 @@ namespace Proyecto_IO
 
         static void menu(Lista_coches autos)
         {
+            Console.WriteLine("Quieres reproducir la pista de audio?");
+            Console.WriteLine("1: Si");
+            Console.WriteLine("2: No");
+            int opcionmusica;
+            try
+            {
+                opcionmusica = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.Clear();
+                Console.WriteLine("No has introducido un numero");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                Console.Clear();
+                menu(autos);
+                return;
+            }
+            if (opcionmusica == 1)
+            {
+                //SoundPlayer admite audio en .wav, poneis la musica dentro del proyecto bin/debug y ya
+                SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
+                player.PlayLooping();
+                Console.Clear();
+            }else if (opcionmusica == 2)
+            {
+                SoundPlayer player = new SoundPlayer("Just_The_Two_Of_Us.wav");
+                player.Stop();
+                Console.Clear();
+            }
+            else
+            {
+                Console.WriteLine("No has introducido un numero valido");
+                Console.WriteLine("Pulsa una tecla para volver");
+                Console.ReadKey();
+                Console.Clear();
+                menu(autos);
+            }
+
+            
             int opcion = 2;
             while (opcion != 0)
             {
@@ -153,6 +191,7 @@ namespace Proyecto_IO
                     Console.WriteLine("No has introducido un numero");
                     Console.WriteLine("Pulsa una tecla para volver");
                     Console.ReadKey();
+                    Console.Clear();
                     menu(autos);
                     break;
                 }
